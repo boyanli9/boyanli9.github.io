@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Boyan Li, MSc student at the University of Alberta working on how AI agents learn from interaction.">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>Boyan Li</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: one 780px reading column; header = bio + portrait; papers = 168px figure + text, Barron-style */
+  :root {
+    --bg: #ffffff;
+    --fg: #16181d;
+    --muted: #5a606b;
+    --faint: #8b919c;
+    --line: #e6e8ec;
+    --accent: #2346a0;
+    --accent-wash: #eef1f9;
+    --mark: #9c3b1f;
+    --tile: #f5f6f8;
+    --award-bg: #fdf0e3;
+    --award-fg: #9c3b1f;
+    --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+    --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121418; --fg: #e7e9ee; --muted: #a3a9b4; --faint: #737a86; --line: #262a31;
+      --accent: #8fb0ff; --accent-wash: #1b2335; --mark: #f0a183; --tile: #1a1d22; color-scheme: dark;
+      --award-bg: #3a2418; --award-fg: #f5b48f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121418; --fg: #e7e9ee; --muted: #a3a9b4; --faint: #737a86; --line: #262a31;
+    --accent: #8fb0ff; --accent-wash: #1b2335; --mark: #f0a183; --tile: #1a1d22; color-scheme: dark;
+    --award-bg: #3a2418; --award-fg: #f5b48f;
+  }
+
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font: 15.5px/1.65 var(--f-body); padding-inline: 20px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+  main { max-width: 780px; margin: 0 auto; padding-block: 72px 48px; display: flex; flex-direction: column; gap: 56px; }
+
+  .intro { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 40px; align-items: start; }
+  h1 { font: 500 40px/1.1 var(--f-display); letter-spacing: -0.015em; margin: 0; }
+  .zh { font: 400 18px var(--f-display); color: var(--faint); margin-left: 10px; letter-spacing: 0.05em; }
+  .role { color: var(--muted); margin: 8px 0 20px; }
+  .bio { display: flex; flex-direction: column; gap: 12px; max-width: 62ch; }
+  .bio p { margin: 0; }
+  .links { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 0; margin-top: 22px; font-size: 14.5px; }
+  .links > * + *::before { content: "/"; color: var(--line); margin: 0 10px; }
+  .email { font-family: var(--f-mono); font-size: 13.5px; color: var(--muted); }
+  .copy { font: 500 12px var(--f-body); color: var(--accent); background: none; border: 0; padding: 0 0 0 6px; cursor: pointer; }
+  .portrait { order: -1; width: 180px; max-width: 100%; aspect-ratio: 1; border-radius: 12px; object-fit: cover; background: var(--accent-wash); display: block; }
+  .email { color: var(--accent); }
+  .research-lead { margin: 0 0 22px; max-width: 64ch; }
+  .themes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 36px; }
+  .theme h3 { font: 500 18px/1.3 var(--f-display); margin: 0 0 6px; text-wrap: balance; }
+  .theme p { margin: 0; font-size: 14.5px; color: var(--muted); }
+  .refs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .refs > * { font: 500 12px var(--f-mono); padding: 2px 8px; border-radius: 4px; background: var(--accent-wash); }
+  .refs span { color: var(--faint); background: var(--tile); }
+  .pub { scroll-margin-top: 24px; }
+  .pub:target h3 a { color: var(--accent); }
+  .pubs.text-only .fig { display: none; }
+  .pubs.text-only .pub { grid-template-columns: minmax(0, 1fr); }
+
+  h2 { font: 600 12px var(--f-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin: 0 0 16px; }
+  .lead { color: var(--muted); margin: -4px 0 8px; max-width: 62ch; }
+
+  .news { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .news li { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; }
+  .news time { font: 400 13px/1.9 var(--f-mono); color: var(--faint); font-variant-numeric: tabular-nums; }
+
+  .pubs { display: flex; flex-direction: column; }
+  .pub { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 26px; padding-block: 22px; border-top: 1px solid var(--line); }
+  .pub:first-child { border-top: 0; }
+  .fig { width: 168px; max-width: 100%; aspect-ratio: 4 / 3; border-radius: 6px; background: var(--tile); border: 1px solid var(--line); overflow: hidden; }
+  .fig svg { width: 100%; height: 100%; display: block; }
+  .fig text { font-family: var(--f-mono); }
+  .pub h3 { font: 500 19px/1.3 var(--f-display); margin: 0; text-wrap: balance; }
+  .pub h3 a { color: var(--fg); }
+  .pub h3 a:hover { color: var(--accent); }
+  .authors { color: var(--muted); font-size: 14.5px; margin-top: 6px; }
+  .authors b { color: var(--fg); font-weight: 600; }
+  .venue { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; margin-top: 4px; font-size: 14.5px; }
+  .venue em { font-style: italic; }
+  .tag { font: 500 11.5px var(--f-mono); color: var(--mark); letter-spacing: 0.02em; }
+  .award { font-weight: 600; }
+  .authors sup { font-size: 0.7em; line-height: 0; }
+  .tldr { margin: 8px 0 0; font-size: 14.5px; max-width: 62ch; }
+  .plinks { display: flex; flex-wrap: wrap; gap: 4px 0; margin-top: 8px; font-size: 14px; }
+  .plinks > * + *::before { content: "/"; color: var(--line); margin: 0 9px; }
+  details { display: inline; }
+  summary { color: var(--accent); cursor: pointer; list-style: none; display: inline; }
+  summary::-webkit-details-marker { display: none; }
+  .bib { margin-top: 10px; position: relative; }
+  .bib pre {
+    margin: 0; padding: 12px 14px; background: var(--tile); border: 1px solid var(--line); border-radius: 6px;
+    font: 12.5px/1.55 var(--f-mono); color: var(--muted); overflow-x: auto; white-space: pre;
+  }
+  .bib .copy { position: absolute; top: 8px; right: 10px; background: var(--tile); padding: 2px 6px; }
+
+  footer { border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--faint); }
+  .theme-btn { font: inherit; color: var(--faint); background: none; border: 0; padding: 0; cursor: pointer; }
+  .theme-btn:hover { color: var(--fg); }
+
+  @media (max-width: 640px) {
+    body { padding-inline: 16px; }
+    main { padding-block: 40px 32px; gap: 44px; }
+    .intro { grid-template-columns: 1fr; gap: 20px; }
+    .portrait { width: 150px; order: -1; }
+    h1 { font-size: 32px; }
+    .pub { grid-template-columns: 1fr; gap: 14px; }
+    .themes { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .fig { width: 100%; aspect-ratio: 16 / 7; }
+    .news li { grid-template-columns: 64px minmax(0, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <header class="intro">
+    <div>
+      <h1>Boyan Li</h1>
+      <p class="role">MSc student · University of Alberta</p>
+      <div class="bio">
+        <p>I'm a thesis-based MSc student in Computing Science at the <a href="https://www.ualberta.ca/">University of Alberta</a>, advised by <a href="https://xiye17.github.io/">Xi Ye</a>. I'm currently also a research assistant at <a href="https://shanghai.nyu.edu/">NYU Shanghai</a>, working with <a href="https://henryzhao5852.github.io/">Chen Zhao</a>.</p>
+        <p>I received my bachelor's degree in Computer Science from the <a href="https://www.sustech.edu.cn/en/">Southern University of Science and Technology</a> (SUSTech), where I worked with <a href="https://cse.sustech.edu.cn/faculty/~yangp/">Peng Yang</a> and with <a href="https://xuminghu.github.io/">Xuming Hu</a> at HKUST (Guangzhou).</p>
+        <p>My research broadly focuses on how AI agents learn from interaction: how they acquire targeted information and data, how to obtain reliable feedback for open-ended tasks, and how that feedback can drive continual improvement of models and agents. Topics I am interested in include recursive self-improvement, deep research (automated research), continual learning, and interpretability.</p>
+      </div>
+      <div class="links">
+        <span><a class="email" href="mailto:boyan9@ualberta.ca">boyan9@ualberta.ca</a><button class="copy" type="button" data-copy="boyan9@ualberta.ca">Copy</button></span>
+        <a href="https://scholar.google.com/citations?hl=en&amp;user=cs8WenoAAAAJ">Google Scholar</a>
+        <a href="https://github.com/bakdop">GitHub</a>
+      </div>
+    </div>
+    <img class="portrait" src="photo.jpg" alt="Boyan Li wearing a sorting hat">
+  </header>
+
+  <section>
+    <h2>Publications</h2>
+    <p class="lead">* equal contribution &nbsp;·&nbsp; # equal advising</p>
+    <div class="pubs text-only">
+
+      <article class="pub" id="pub-sequential">
+        <div class="fig" aria-hidden="true">
+          <svg viewBox="0 0 168 126">
+            <text x="14" y="26" font-size="9" fill="var(--faint)">sequential</text>
+            <rect x="14" y="34" width="56" height="22" rx="4" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1"/>
+            <text x="42" y="49" font-size="10" text-anchor="middle" fill="var(--accent)">OPD</text>
+            <path d="M74 45 H92" stroke="var(--accent)" stroke-width="1.2"/>
+            <path d="M89 41 L94 45 L89 49" fill="none" stroke="var(--accent)" stroke-width="1.2"/>
+            <rect x="98" y="34" width="56" height="22" rx="4" fill="var(--accent)"/>
+            <text x="126" y="49" font-size="10" text-anchor="middle" fill="var(--bg)">RLVR</text>
+            <text x="14" y="82" font-size="9" fill="var(--faint)">joint</text>
+            <rect x="14" y="90" width="140" height="22" rx="4" fill="none" stroke="var(--faint)" stroke-dasharray="3 3"/>
+            <text x="84" y="105" font-size="10" text-anchor="middle" fill="var(--faint)">OPD + RLVR</text>
+          </svg>
+        </div>
+        <div>
+          <h3><a href="https://arxiv.org/abs/2609.04108">Sequential Beats Joint: On the Interplay between On-Policy Distillation and RLVR</a></h3>
+          <div class="authors"><b>Boyan Li</b>*, Bingsen Chen*, Chenghao Yang, Ping Nie, Chen Zhao<sup>#</sup>, Xi Ye<sup>#</sup></div>
+          <div class="venue"><em>Findings of EMNLP 2026</em></div>
+          <p class="tldr">Running on-policy distillation first and RLVR second outperforms pure distillation, pure RL, and methods that mix both signals in one stage on math and logic reasoning benchmarks.</p>
+          <div class="plinks">
+            <a href="https://arxiv.org/abs/2609.04108">arXiv</a>
+            <a href="https://arxiv.org/pdf/2609.04108">PDF</a>
+            <a href="https://github.com/StringNLPLAB/opd-rlvr">Code</a>
+            <details><summary>BibTeX</summary></details>
+          </div>
+          <div class="bib" hidden><button class="copy" type="button">Copy</button><pre>@inproceedings{li2026sequential,
+  title     = {Sequential Beats Joint: On the Interplay between
+               On-Policy Distillation and RLVR},
+  author    = {Li, Boyan and Chen, Bingsen and Yang, Chenghao and
+               Nie, Ping and Zhao, Chen and Ye, Xi},
+  booktitle = {Findings of the Association for Computational Linguistics:
+               EMNLP 2026},
+  year      = {2026}
+}</pre></div>
+        </div>
+      </article>
+
+      <article class="pub" id="pub-mrdre">
+        <div class="fig" aria-hidden="true">
+          <svg viewBox="0 0 168 126">
+            <rect x="14" y="20" width="40" height="54" rx="3" fill="var(--bg)" stroke="var(--line)"/>
+            <rect x="64" y="20" width="40" height="54" rx="3" fill="var(--bg)" stroke="var(--line)"/>
+            <rect x="114" y="20" width="40" height="54" rx="3" fill="var(--bg)" stroke="var(--line)"/>
+            <g stroke="var(--faint)" stroke-width="2" stroke-linecap="round">
+              <path d="M21 30 H47 M21 38 H44 M21 46 H47 M21 54 H40 M21 62 H45"/>
+              <path d="M71 30 H97 M71 38 H94 M71 54 H90 M71 62 H95"/>
+              <path d="M121 30 H147 M121 54 H140"/>
+            </g>
+            <path d="M71 46 H97" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M121 38 H144 M121 62 H145" stroke="var(--mark)" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 3"/>
+            <text x="34" y="92" font-size="9" text-anchor="middle" fill="var(--faint)">turn 1</text>
+            <text x="84" y="92" font-size="9" text-anchor="middle" fill="var(--faint)">turn 2</text>
+            <text x="134" y="92" font-size="9" text-anchor="middle" fill="var(--faint)">turn 3</text>
+            <text x="84" y="112" font-size="9" text-anchor="middle" fill="var(--mark)">16–27% regress</text>
+          </svg>
+        </div>
+        <div>
+          <h3><a href="https://aclanthology.org/2026.acl-long.609/">Beyond Single-shot Writing: Deep Research Agents are Unreliable at Multi-turn Report Revision</a></h3>
+          <div class="authors">Bingsen Chen*, <b>Boyan Li</b>*, Ping Nie, Yuyu Zhang, Xi Ye<sup>#</sup>, Chen Zhao<sup>#</sup></div>
+          <div class="venue"><em>Proceedings of ACL 2026</em><span class="award">(SAC Highlight Award)</span></div>
+          <p class="tldr">Mr Dre evaluates deep research agents on revising reports from user feedback. Agents address most feedback but regress on 16–27% of content and citations they had already gotten right.</p>
+          <div class="plinks">
+            <a href="https://aclanthology.org/2026.acl-long.609.pdf">Paper</a>
+            <a href="https://arxiv.org/abs/2601.13217">arXiv</a>
+            <a href="https://github.com/BaleChen/Mr-Dre">Code</a>
+            <details><summary>BibTeX</summary></details>
+          </div>
+          <div class="bib" hidden><button class="copy" type="button">Copy</button><pre>@inproceedings{chen2026beyond,
+  title     = {Beyond Single-shot Writing: Deep Research Agents are
+               Unreliable at Multi-turn Report Revision},
+  author    = {Chen, Bingsen and Li, Boyan and Nie, Ping and
+               Zhang, Yuyu and Ye, Xi and Zhao, Chen},
+  booktitle = {Proceedings of the 64th Annual Meeting of the
+               Association for Computational Linguistics},
+  pages     = {13325--13356},
+  year      = {2026}
+}</pre></div>
+        </div>
+      </article>
+
+      <article class="pub" id="pub-errorradar">
+        <div class="fig" aria-hidden="true">
+          <svg viewBox="0 0 168 126">
+            <rect x="14" y="16" width="44" height="40" rx="3" fill="var(--bg)" stroke="var(--line)"/>
+            <path d="M20 48 L36 24 L52 48 Z" fill="none" stroke="var(--faint)" stroke-width="1.2"/>
+            <text x="68" y="28" font-size="9" fill="var(--faint)">step 1  ✓</text>
+            <text x="68" y="44" font-size="9" fill="var(--faint)">step 2  ✓</text>
+            <rect x="64" y="50" width="90" height="16" rx="3" fill="var(--accent-wash)" stroke="var(--mark)"/>
+            <text x="68" y="62" font-size="9" fill="var(--mark)">step 3  ✗ calc</text>
+            <text x="68" y="80" font-size="9" fill="var(--faint)">step 4</text>
+            <text x="14" y="108" font-size="9" fill="var(--faint)">locate + classify error</text>
+          </svg>
+        </div>
+        <div>
+          <h3><a href="https://aclanthology.org/2026.findings-acl.1217/">ErrorRadar: Benchmarking Complex Mathematical Reasoning of Multimodal Large Language Models via Error Detection</a></h3>
+          <div class="authors">Yibo Yan, Shen Wang, Jiahao Huo, Hang Li, <b>Boyan Li</b>, Jiamin Su, Xiong Gao, Yi-Fan Zhang, Tianlong Xu, Zhendong Chu, Aoxiao Zhong, Kun Wang, Hui Xiong, Philip S. Yu, Xuming Hu, Qingsong Wen</div>
+          <div class="venue"><em>Findings of ACL 2026</em></div>
+          <p class="tldr">A benchmark of 2,500 real K-12 multimodal math problems where models must find the wrong step and name the error type. The strongest model, GPT-4o, still trails human experts by about 10%.</p>
+          <div class="plinks">
+            <a href="https://aclanthology.org/2026.findings-acl.1217.pdf">Paper</a>
+            <a href="https://arxiv.org/abs/2410.04509">arXiv</a>
+            <details><summary>BibTeX</summary></details>
+          </div>
+          <div class="bib" hidden><button class="copy" type="button">Copy</button><pre>@inproceedings{yan2026errorradar,
+  title     = {ErrorRadar: Benchmarking Complex Mathematical Reasoning of
+               Multimodal Large Language Models via Error Detection},
+  author    = {Yan, Yibo and Wang, Shen and Huo, Jiahao and Li, Hang and
+               Li, Boyan and Su, Jiamin and Gao, Xiong and Zhang, Yi-Fan and
+               Xu, Tianlong and Chu, Zhendong and Zhong, Aoxiao and
+               Wang, Kun and Xiong, Hui and Yu, Philip S. and Hu, Xuming and
+               Wen, Qingsong},
+  booktitle = {Findings of the Association for Computational Linguistics:
+               ACL 2026},
+  pages     = {24297--24334},
+  year      = {2026}
+}</pre></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <footer>
+    <span>Last updated October 2026</span>
+    <button class="theme-btn" id="theme-toggle" type="button">Dark mode</button>
+  </footer>
+
+</main>
+
+<script>
+  (function () {
+    function copyText(text, btn) {
+      var done = function () { var old = btn.textContent; btn.textContent = "Copied"; setTimeout(function () { btn.textContent = old; }, 1400); };
+      try {
+        navigator.clipboard.writeText(text).then(done, function () { selectFallback(btn); });
+      } catch (e) { selectFallback(btn); }
+    }
+    function selectFallback(btn) {
+      var target = btn.parentElement.querySelector("pre, .email");
+      if (!target) return;
+      var r = document.createRange(); r.selectNodeContents(target);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    }
+
+    document.querySelectorAll(".copy").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var text = btn.dataset.copy || btn.parentElement.querySelector("pre").textContent;
+        copyText(text, btn);
+      });
+    });
+
+    document.querySelectorAll(".plinks details").forEach(function (d) {
+      var bib = d.closest(".pub").querySelector(".bib");
+      d.querySelector("summary").addEventListener("click", function (e) {
+        e.preventDefault();
+        bib.hidden = !bib.hidden;
+      });
+    });
+
+    var root = document.documentElement, btn = document.getElementById("theme-toggle");
+    function isDark() {
+      var t = root.getAttribute("data-theme");
+      return t ? t === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    function label() { btn.textContent = isDark() ? "Light mode" : "Dark mode"; }
+    try { var saved = localStorage.getItem("theme"); if (saved) root.setAttribute("data-theme", saved); } catch (e) {}
+    label();
+    btn.addEventListener("click", function () {
+      var next = isDark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch (e) {}
+      label();
+    });
+  })();
+</script>
+
+</body>
+</html>
